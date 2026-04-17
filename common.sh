@@ -11,6 +11,7 @@ N="\e[0m"
 SCRIPT_DIR=$PWD
 START_TIME=$(date +%s)
 MONGODB_HOST=mongodb.cineniti.in
+MYSQL_HOST=mysql.cineniti.in
 
 # Create logs folder first
 mkdir -p $LOGS_FOLDER
@@ -48,6 +49,18 @@ nodejs_setup(){
 
 }
 
+
+java_setup(){
+    dnf install maven -y &>>$LOGS_FILE
+    VALIDATE $? "Installing Maven"
+    dnf install maven -y &>>$LOGS_FILE
+    VALIDATE $? "Installing Maven"
+    mv target/$app_name-1.0.jar $app_name.jar 
+    VALIDATE $? "Moving and Renaming $app_name"
+
+    
+fi
+}
 app_setup(){
     id roboshop &>>$LOGS_FILE
     if [ $? -ne 0 ]; then
@@ -87,6 +100,7 @@ app_restart(){
     systemctl restart $app_name
     VALIDATE $? "Restarting $app_name"
 }
+
 
 print_total_time(){
     END_TIME=$(date +%s)
