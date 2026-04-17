@@ -1,18 +1,12 @@
 #!/bin/bash
 
 source ./common.sh
-app_name="shipping"
-
+app_name=shipping
 
 check_root
 app_setup
 java_setup
 systemd_setup
-
-
-
-
-
 
 dnf install mysql -y  &>>$LOGS_FILE
 VALIDATE $? "Installing MySQL"
@@ -29,5 +23,4 @@ else
 fi
 
 app_restart
-
 print_total_time

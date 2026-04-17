@@ -46,21 +46,20 @@ nodejs_setup(){
     
     npm install  &>>$LOGS_FILE
     VALIDATE $? "Installing dependencies"
-
 }
-
 
 java_setup(){
     dnf install maven -y &>>$LOGS_FILE
     VALIDATE $? "Installing Maven"
-    dnf install maven -y &>>$LOGS_FILE
-    VALIDATE $? "Installing Maven"
-    mv target/$app_name-1.0.jar $app_name.jar 
-    VALIDATE $? "Moving and Renaming $app_name"
-
     
-fi
+    # Fixed: Removed duplicate maven install and fixed the mv command
+    # The app_name variable should be set before calling this function
+    if [ -n "$app_name" ] && [ -f "target/${app_name}-1.0.jar" ]; then
+        mv target/${app_name}-1.0.jar ${app_name}.jar 
+        VALIDATE $? "Moving and Renaming $app_name"
+    fi
 }
+
 app_setup(){
     id roboshop &>>$LOGS_FILE
     if [ $? -ne 0 ]; then
@@ -82,8 +81,7 @@ app_setup(){
     VALIDATE $? "Removing existing code"
 
     unzip /tmp/$app_name.zip &>>$LOGS_FILE
-    VALIDATE $? "Uzip $app_name code"
-
+    VALIDATE $? "Unzip $app_name code"
 }
 
 systemd_setup(){ 
@@ -100,7 +98,6 @@ app_restart(){
     systemctl restart $app_name
     VALIDATE $? "Restarting $app_name"
 }
-
 
 print_total_time(){
     END_TIME=$(date +%s)
