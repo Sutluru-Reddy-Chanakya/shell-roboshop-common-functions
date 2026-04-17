@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source ./common.sh
+SCRIPT_DIR="${SCRIPT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
 
 app_name=frontend
 app_dir=/usr/share/nginx/html
